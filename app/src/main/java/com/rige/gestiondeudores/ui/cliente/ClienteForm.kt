@@ -1,6 +1,7 @@
 package com.rige.gestiondeudores.ui.cliente
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -24,6 +25,9 @@ class ClienteForm : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cliente_form)
 
+        supportActionBar?.title = "Formulario del cliente"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         initComponents()
         initListeners()
         clienteDao = ClienteDao(this)
@@ -33,6 +37,17 @@ class ClienteForm : AppCompatActivity() {
             cargarDatos(clienteId)
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun guardar() {
         val nombre = etNombre.text.toString().trim()

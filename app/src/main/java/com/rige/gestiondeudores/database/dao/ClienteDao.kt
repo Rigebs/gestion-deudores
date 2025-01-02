@@ -20,7 +20,6 @@ class ClienteDao(context: Context) {
         return db.insert(DatabaseHelper.TABLE_CLIENTES, null, values)
     }
 
-    // Obtener todos los clientes
     fun obtenerTodosLosClientes(): List<Cliente> {
         val db = dbHelper.readableDatabase
         val clientes = mutableListOf<Cliente>()
@@ -42,6 +41,31 @@ class ClienteDao(context: Context) {
         }
         cursor.close()
         return clientes
+    }
+
+    fun obtenerClientePorId(clienteId: Int): Cliente? {
+        val db = dbHelper.readableDatabase
+        val cursor: Cursor = db.query(
+            DatabaseHelper.TABLE_CLIENTES,
+            null,
+            "${DatabaseHelper.COLUMN_CLIENTE_ID} = ?",
+            arrayOf(clienteId.toString()),
+            null,
+            null,
+            null
+        )
+
+        var cliente: Cliente? = null
+        if (cursor.moveToFirst()) {
+            cliente = Cliente(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_ID)),
+                nombre = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_NOMBRE)),
+                telefono = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_TELEFONO)),
+                direccion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_DIRECCION))
+            )
+        }
+        cursor.close()
+        return cliente
     }
 
     // Actualizar un cliente
