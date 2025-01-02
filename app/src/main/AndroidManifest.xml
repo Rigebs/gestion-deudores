@@ -13,6 +13,9 @@
         android:theme="@style/Theme.GestionDeudores"
         tools:targetApi="31">
         <activity
+            android:name=".ui.venta.VentaForm"
+            android:exported="false" />
+        <activity
             android:name=".ui.cliente.ClienteInfo"
             android:exported="false" />
         <activity
