@@ -13,16 +13,22 @@
         android:theme="@style/Theme.GestionDeudores"
         tools:targetApi="31">
         <activity
-            android:name=".ui.venta.VentaForm"
+            android:name=".ui.venta.VentaInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.cliente.ClienteInfo"
+            android:name=".ui.venta.VentaListActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.cliente.ClienteList"
+            android:name=".ui.venta.VentaFormActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.cliente.ClienteForm"
+            android:name=".ui.cliente.ClienteInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.cliente.ClienteListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.cliente.ClienteFormActivity"
             android:exported="false" />
         <activity
             android:name=".ui.cliente.ClienteRegistro"

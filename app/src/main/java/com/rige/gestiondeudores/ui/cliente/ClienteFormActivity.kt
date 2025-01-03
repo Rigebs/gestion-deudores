@@ -10,7 +10,7 @@ import com.rige.gestiondeudores.R
 import com.rige.gestiondeudores.database.dao.ClienteDao
 import com.rige.gestiondeudores.models.Cliente
 
-class ClienteForm : AppCompatActivity() {
+class ClienteFormActivity : AppCompatActivity() {
 
     private lateinit var etNombre: EditText
     private lateinit var etTelefono: EditText
@@ -47,7 +47,6 @@ class ClienteForm : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     private fun guardar() {
         val nombre = etNombre.text.toString().trim()

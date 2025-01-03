@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import com.rige.gestiondeudores.R
+import com.rige.gestiondeudores.adapters.ClienteAutocompleteAdapter
 import com.rige.gestiondeudores.database.dao.ClienteDao
 import com.rige.gestiondeudores.database.dao.VentaDao
 import com.rige.gestiondeudores.models.Venta
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class VentaForm : AppCompatActivity() {
+class VentaFormActivity : AppCompatActivity() {
 
     private lateinit var etMonto: EditText
-    private lateinit var etFechaVenta: EditText
     private lateinit var etDescripcion: EditText
-    private lateinit var etFechaPago: EditText
-    private lateinit var swEstado: SwitchCompat
     private lateinit var btnGuardar: Button
     private lateinit var actvCliente: AutoCompleteTextView
 
@@ -54,32 +54,23 @@ class VentaForm : AppCompatActivity() {
 
     private fun guardar() {
         val monto = etMonto.text.toString().toDoubleOrNull()
-        val fechaVenta = etFechaVenta.text.toString().trim()
         val descripcion = etDescripcion.text.toString().trim()
-        val fechaPago = etFechaPago.text.toString().trim()
-        val estado = swEstado.isChecked
-
         if (monto == null || monto <= 0) {
             Toast.makeText(this, "El monto debe ser mayor a 0", Toast.LENGTH_SHORT).show()
             return
         }
-
-        if (fechaVenta.isEmpty()) {
-            Toast.makeText(this, "La fecha de venta es obligatoria", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         if (clienteId == 0) {
             Toast.makeText(this, "Debe seleccionar un cliente", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val currentDate = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
+
         val venta = Venta(
             monto = monto,
-            fechaVenta = fechaVenta,
-            estado = estado,
+            fechaVenta = currentDate,
+            estado = false,
             descripcion = descripcion.ifEmpty { null },
-            fechaPago = fechaPago.ifEmpty { null },
             clienteId = clienteId
         )
         ventaDao.insertarVenta(venta)
@@ -90,28 +81,30 @@ class VentaForm : AppCompatActivity() {
         finish()
     }
 
+
     private fun limpiarCampos() {
         etMonto.text.clear()
-        etFechaVenta.text.clear()
         etDescripcion.text.clear()
-        etFechaPago.text.clear()
-        swEstado.isChecked = false
         actvCliente.text.clear()
     }
 
     private fun cargarClientes() {
-        val clientes = clienteDao.obtenerTodosLosClientes()
-        val nombresClientes = clientes.map { it.nombre }
 
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nombresClientes)
+        val clientes = clienteDao.obtenerTodosLosClientes()
+        val adapter = ClienteAutocompleteAdapter(this, clientes)
         actvCliente.setAdapter(adapter)
 
         actvCliente.setOnItemClickListener { _, _, position, _ ->
-            val clienteSeleccionado = clientes[position]
+            val clienteSeleccionado = adapter.getItem(position)
             clienteId = clienteSeleccionado.id ?: 0
+
+            println("Cliente seleccionado: ${clienteSeleccionado.nombre}")
+            Toast.makeText(this, "Cliente seleccionado: ${clienteSeleccionado.nombre}", Toast.LENGTH_SHORT).show()
         }
+
     }
+
+
 
     private fun initListeners() {
         btnGuardar.setOnClickListener { guardar() }
@@ -119,10 +112,7 @@ class VentaForm : AppCompatActivity() {
 
     private fun initComponents() {
         etMonto = findViewById(R.id.etMonto)
-        etFechaVenta = findViewById(R.id.etFechaVenta)
         etDescripcion = findViewById(R.id.etDescripcion)
-        etFechaPago = findViewById(R.id.etFechaPago)
-        swEstado = findViewById(R.id.swEstado)
         btnGuardar = findViewById(R.id.btnGuardar)
         actvCliente = findViewById(R.id.actvCliente)
     }

@@ -27,7 +27,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@drawable/ic_edit"
         android:contentDescription="Editar"
         android:background="?attr/selectableItemBackgroundBorderless"
         />
@@ -37,9 +37,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:src="@android:drawable/ic_menu_call"
+        android:src="@drawable/ic_call"
         android:contentDescription="Llamar"
-        android:rotation="-90"
         android:background="?attr/selectableItemBackgroundBorderless"
         />
 </LinearLayout>

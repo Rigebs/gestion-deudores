@@ -5,4 +5,8 @@ data class Cliente(
     val nombre: String,
     val telefono: String?,
     val direccion: String?
-)
+){
+    override fun toString(): String {
+        return nombre
+    }
+}

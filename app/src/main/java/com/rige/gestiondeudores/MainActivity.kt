@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import com.rige.gestiondeudores.ui.cliente.ClienteForm
-import com.rige.gestiondeudores.ui.cliente.ClienteList
+import com.rige.gestiondeudores.ui.cliente.ClienteListActivity
+import com.rige.gestiondeudores.ui.venta.VentaListActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,12 +26,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initListeners() {
-        cvClientes.setOnClickListener { goTo(ClienteList::class.java) }
+        cvClientes.setOnClickListener { goTo(ClienteListActivity::class.java) }
+        cvVentas.setOnClickListener { goTo(VentaListActivity::class.java) }
     }
 
 
     private fun initComponents() {
         cvClientes = findViewById(R.id.cvClientes)
         cvVentas = findViewById(R.id.cvVentas)
+
+        supportActionBar?.hide()
     }
 }

@@ -12,8 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.rige.gestiondeudores.R
 import com.rige.gestiondeudores.models.Cliente
-import com.rige.gestiondeudores.ui.cliente.ClienteForm
-import com.rige.gestiondeudores.ui.cliente.ClienteInfo
+import com.rige.gestiondeudores.ui.cliente.ClienteFormActivity
+import com.rige.gestiondeudores.ui.cliente.ClienteInfoActivity
 
 class ClienteAdapter(
     private val context: Context,
@@ -51,14 +51,13 @@ class ClienteAdapter(
 
         btnEditar.setOnClickListener {
             Toast.makeText(context, "Editar cliente: ${cliente.nombre}", Toast.LENGTH_SHORT).show()
-            val intent = Intent(context, ClienteForm::class.java)
+            val intent = Intent(context, ClienteFormActivity::class.java)
             intent.putExtra("clienteId", cliente.id)
             context.startActivity(intent)
         }
 
         view.setOnClickListener {
-            println("presionado ${cliente.nombre}")
-            val intent = Intent(context, ClienteInfo::class.java)
+            val intent = Intent(context, ClienteInfoActivity::class.java)
             intent.putExtra("clienteId", cliente.id)
             context.startActivity(intent)
         }
