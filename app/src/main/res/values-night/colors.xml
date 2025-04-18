@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#004E89</color>
+
+    <color name="secondary">#EFEFD0</color>
+
+    <color name="background_app">#121212</color>
+
+    <color name="background_card">#0A3A5F</color>
+
+    <color name="background_secondary_card">#CC5A2C</color>
+</resources>

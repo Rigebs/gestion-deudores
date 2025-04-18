@@ -43,6 +43,34 @@ class ClienteDao(context: Context) {
         return clientes
     }
 
+    fun obtenerClientesPaginado(limit: Int, offset: Int): List<Cliente> {
+        val db = dbHelper.readableDatabase
+        val clientes = mutableListOf<Cliente>()
+
+        val query = """
+        SELECT * FROM ${DatabaseHelper.TABLE_CLIENTES}
+        ORDER BY ${DatabaseHelper.COLUMN_CLIENTE_NOMBRE} ASC
+        LIMIT $limit OFFSET $offset
+    """
+
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val cliente = Cliente(
+                    id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_ID)),
+                    nombre = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_NOMBRE)),
+                    telefono = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_TELEFONO)),
+                    direccion = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_CLIENTE_DIRECCION))
+                )
+                clientes.add(cliente)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return clientes
+    }
+
     fun obtenerClientePorId(clienteId: Int): Cliente? {
         val db = dbHelper.readableDatabase
         val cursor: Cursor = db.query(

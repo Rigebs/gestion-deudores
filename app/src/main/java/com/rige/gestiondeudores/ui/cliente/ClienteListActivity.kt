@@ -22,6 +22,13 @@ class ClienteListActivity : AppCompatActivity() {
     private lateinit var clienteAdapter: ClienteAdapter
     private lateinit var etSearch: EditText
 
+    private var paginaActual = 0
+    private val tamanioPagina = 30
+
+    private lateinit var btnAnterior: android.widget.Button
+    private lateinit var btnSiguiente: android.widget.Button
+    private lateinit var tvPagina: android.widget.TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cliente_list)
@@ -31,14 +38,30 @@ class ClienteListActivity : AppCompatActivity() {
 
         initComponents()
         setupSearchFilter()
+        setupPagination()
     }
+
+//    private fun cargarClientes() {
+//        clienteDao = ClienteDao(this)
+//        listaClientes = clienteDao.obtenerTodosLosClientes()
+//        clienteAdapter = ClienteAdapter(this, listaClientes)
+//        lvClientes.adapter = clienteAdapter
+//    }
 
     private fun cargarClientes() {
         clienteDao = ClienteDao(this)
-        listaClientes = clienteDao.obtenerTodosLosClientes()
+        val offset = paginaActual * tamanioPagina
+        listaClientes = clienteDao.obtenerClientesPaginado(tamanioPagina, offset)
         clienteAdapter = ClienteAdapter(this, listaClientes)
         lvClientes.adapter = clienteAdapter
+        tvPagina.text = ("Página ${paginaActual + 1}").toString()
+
+        btnAnterior.isEnabled = paginaActual > 0
+
+        // Deshabilita botón "Siguiente" si no hay más datos que cargar
+        btnSiguiente.isEnabled = listaClientes.size == tamanioPagina
     }
+
 
     private fun setupSearchFilter() {
         etSearch.addTextChangedListener(object : TextWatcher {
@@ -81,8 +104,28 @@ class ClienteListActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupPagination() {
+        btnAnterior.setOnClickListener {
+            if (paginaActual > 0) {
+                paginaActual--
+                cargarClientes()
+            }
+        }
+
+        btnSiguiente.setOnClickListener {
+            if (listaClientes.size == tamanioPagina) { // hay más resultados
+                paginaActual++
+                cargarClientes()
+            }
+        }
+    }
+
     private fun initComponents() {
         lvClientes = findViewById(R.id.lvClientes)
         etSearch = findViewById(R.id.etSearch)
+
+        btnAnterior = findViewById(R.id.btnAnterior)
+        btnSiguiente = findViewById(R.id.btnSiguiente)
+        tvPagina = findViewById(R.id.tvPagina)
     }
 }

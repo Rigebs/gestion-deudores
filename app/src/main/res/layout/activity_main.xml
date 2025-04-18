@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,17 +8,67 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!-- Contador -->
+    <TextView
+        android:id="@+id/tvContador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Tiempo restante: 60s"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@color/secondary"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Total de Deudas -->
+    <TextView
+        android:id="@+id/tvTotalDeudas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Total de deudas: 6"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/tvContador"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintBottom_toTopOf="@+id/llRegistrar" />
+
+    <!-- Botón Activar -->
+    <Button
+        android:id="@+id/btnActivar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ACTIVAR"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/background_card"
+        app:layout_constraintTop_toTopOf="@id/tvTotalDeudas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvTotalDeudas" />
+
+    <!-- Cards principales -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cvClientes"
         android:layout_width="0dp"
         android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
         app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/cvVentas"
+        app:cardBackgroundColor="@color/background_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/cvVentas"
+        app:layout_constraintTop_toBottomOf="@+id/llRegistrar">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
+            app:tint="@color/secondary"
             android:contentDescription="Clientes"
             android:src="@drawable/customer_icon"/>
     </androidx.cardview.widget.CardView>
@@ -27,16 +77,106 @@
         android:id="@+id/cvVentas"
         android:layout_width="0dp"
         android:layout_height="160dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="8dp"
         app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/background_card"
         app:layout_constraintStart_toEndOf="@+id/cvClientes"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llRegistrar">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp"
+            app:tint="@color/secondary"
+            android:contentDescription="Ventas"
             android:src="@drawable/sales_icon"/>
     </androidx.cardview.widget.CardView>
+
+    <!-- Cards de registrar -->
+    <LinearLayout
+        android:id="@+id/llRegistrar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalDeudas"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvRegistrarVenta"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/background_secondary_card">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:tint="@color/black"
+                    android:src="@drawable/ic_add_sale"/>
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:text="Registrar venta"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvRegistrarCliente"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="56dp"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="@color/background_secondary_card">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:tint="@color/black"
+                    android:src="@drawable/ic_add_customer"/>
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:text="Registrar cliente"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <!-- Clientes pendientes -->
+    <TextView
+        android:id="@+id/tvClientesPendientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clientes con deudas pendientes:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/cvVentas"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/lvClientesPendientes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvClientesPendientes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

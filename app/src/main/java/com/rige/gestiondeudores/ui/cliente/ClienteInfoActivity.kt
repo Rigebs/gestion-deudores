@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
@@ -13,7 +14,6 @@ import com.rige.gestiondeudores.R
 import com.rige.gestiondeudores.adapters.VentaClienteAdapter
 import com.rige.gestiondeudores.database.dao.ClienteDao
 import com.rige.gestiondeudores.database.dao.VentaDao
-import com.rige.gestiondeudores.models.custom.VentaCliente
 import com.rige.gestiondeudores.ui.venta.VentaInfoActivity
 
 class ClienteInfoActivity : AppCompatActivity() {
@@ -23,6 +23,8 @@ class ClienteInfoActivity : AppCompatActivity() {
     private lateinit var tvDireccion: TextView
     private lateinit var spnFiltro: Spinner
     private lateinit var lvVentas: ListView
+    private lateinit var tvFiltro: TextView
+
 
     private lateinit var clienteDao: ClienteDao
     private lateinit var ventaDao: VentaDao
@@ -31,6 +33,13 @@ class ClienteInfoActivity : AppCompatActivity() {
     private var estado: Boolean? = null
 
     private var clienteId = 0
+
+    private var paginaActual = 0
+    private val ventasPorPagina = 20
+
+    private lateinit var btnAnterior: Button
+    private lateinit var btnSiguiente: Button
+    private lateinit var tvPagina: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +67,43 @@ class ClienteInfoActivity : AppCompatActivity() {
         }
     }
 
+//    private fun cargarVentas(estado: Boolean?) {
+//        val ventas = ventaDao.obtenerVentasPorCliente(clienteId, estado)
+//        val onEditarClick: (Int) -> Unit = { ventaId ->
+//            mostrarConfirmacion(ventaId)
+//        }
+//        val onVentaClick: (Int) -> Unit = { ventaId ->
+//            abrirDetalleVenta(ventaId)
+//        }
+//        ventaAdapter = VentaClienteAdapter(this, ventas, onEditarClick, onVentaClick)
+//        lvVentas.adapter = ventaAdapter
+//    }
+
     private fun cargarVentas(estado: Boolean?) {
-        val ventas = ventaDao.obtenerVentasPorCliente(clienteId, estado)
+        val offset = paginaActual * ventasPorPagina
+        val ventas = ventaDao.obtenerVentasPorClientePaginado(clienteId, estado, ventasPorPagina, offset)
+
         val onEditarClick: (Int) -> Unit = { ventaId ->
             mostrarConfirmacion(ventaId)
         }
         val onVentaClick: (Int) -> Unit = { ventaId ->
             abrirDetalleVenta(ventaId)
         }
+
         ventaAdapter = VentaClienteAdapter(this, ventas, onEditarClick, onVentaClick)
         lvVentas.adapter = ventaAdapter
+
+        // actualizar número de página
+        tvPagina.text = "Página ${paginaActual + 1}"
+
+        // desactivar botón anterior si estamos en la página 0
+        btnAnterior.isEnabled = paginaActual > 0
+
+        // desactivar siguiente si se recibieron menos de las que caben por página
+        btnSiguiente.isEnabled = ventas.size == ventasPorPagina
     }
+
+
 
     private fun abrirDetalleVenta(ventaId: Int) {
         val intent = Intent(this, VentaInfoActivity::class.java)
@@ -107,6 +142,7 @@ class ClienteInfoActivity : AppCompatActivity() {
     }
 
     private fun mostrarVentas(position: Int) {
+        paginaActual = 0 // Reiniciar al cambiar el filtro
         estado = when (position) {
             0 -> null
             1 -> true
@@ -116,6 +152,7 @@ class ClienteInfoActivity : AppCompatActivity() {
         cargarVentas(estado)
     }
 
+
     private fun initListeners() {
         spnFiltro.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: android.widget.AdapterView<*>, view: android.view.View?, position: Int, id: Long) {
@@ -123,6 +160,10 @@ class ClienteInfoActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+        }
+
+        tvFiltro.setOnClickListener {
+            spnFiltro.performClick()
         }
     }
 
@@ -132,6 +173,24 @@ class ClienteInfoActivity : AppCompatActivity() {
         tvDireccion = findViewById(R.id.tvDireccion)
         spnFiltro = findViewById(R.id.spnFiltro)
         lvVentas = findViewById(R.id.lvVentas)
+        tvFiltro = findViewById(R.id.tvFiltro)
+
+        btnAnterior = findViewById(R.id.btnAnterior)
+        btnSiguiente = findViewById(R.id.btnSiguiente)
+        tvPagina = findViewById(R.id.tvPagina)
+
+        btnAnterior.setOnClickListener {
+            if (paginaActual > 0) {
+                paginaActual--
+                cargarVentas(estado)
+            }
+        }
+
+        btnSiguiente.setOnClickListener {
+            paginaActual++
+            cargarVentas(estado)
+        }
+
 
         clienteDao = ClienteDao(this)
         ventaDao = VentaDao(this)

@@ -8,4 +8,24 @@
     <color name="black">#FF000000</color>
     <color name="blue">#2196F3</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="soft_green">#4CAF50</color>
+    <color name="dark_green">#388E3C</color>
+    <color name="light_green">#81C784</color>
+    <color name="medium_green">#66BB6A</color>
+
+    <color name="yellow">#FFC107</color>
+    <color name="light_yellow">#FFD54F</color>
+
+    <color name="primary">#baf8c4</color>
+
+    <color name="secondary">@color/white</color>
+
+    <color name="background_card">#004E89</color>
+
+    <color name="background_secondary_card">#FF6B35</color>
+
+    <color name="background_app">#baf8c4</color>
 </resources>
